@@ -6,13 +6,13 @@ ne pas lancer tant qu'un point de la section **Paiement** ou **Sécurité** n'es
 ## Infrastructure & domaine
 
 - [ ] Domaine configuré + SSL actif (frontend `donayemtech.com` sur Vercel, API
-      `api.donayemtech.com` sur Railway/Render — SSL géré automatiquement par les deux
-      plateformes, vérifier que le certificat est bien émis avant d'ouvrir le DNS au public)
+      `api.donayemtech.com` sur Hostinger — SSL Vercel automatique, SSL Hostinger à activer
+      dans hPanel ; vérifier que le certificat est bien émis avant d'ouvrir le DNS au public)
 - [ ] Variables d'environnement production configurées
       - Vercel : `NEXT_PUBLIC_API_URL`, `NEXT_PUBLIC_WHATSAPP_NUMBER`,
         `NEXT_PUBLIC_CINETPAY_SITE_ID`, `NEXT_PUBLIC_GA_ID`, `NEXT_PUBLIC_FACEBOOK_PIXEL_ID`
         (voir `frontend/.env.production.example`)
-      - Railway : toutes les clés de `backend/.env.example`, en particulier `APP_ENV=production`,
+      - Hostinger (`.env` du backend) : toutes les clés de `backend/.env.example`, en particulier `APP_ENV=production`,
         `APP_DEBUG=false`, `APP_KEY` généré en prod (`php artisan key:generate`), `DB_*`,
         `MAIL_*`, `CINETPAY_*`, `FRONTEND_URL`, `SANCTUM_STATEFUL_DOMAINS`
 - [ ] CinetPay : `site_id` et `api_key` de production (pas sandbox) renseignés dans les

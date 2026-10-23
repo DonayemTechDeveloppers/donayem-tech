@@ -22,6 +22,7 @@ Contacts métier : 681 181 456 / 696 580 487 — contact@donayemtech.com
 | Frontend | Next.js (App Router) | 14.2.x |
 | Styles | Tailwind CSS | 3.4.x |
 | Animations | Framer Motion | 11.x |
+| i18n | next-intl (fr par défaut, en, de) | — |
 | Icônes | Lucide React | latest |
 | Forms | React Hook Form | 7.x |
 | HTTP client | Axios | 1.7.x |
@@ -33,7 +34,7 @@ Contacts métier : 681 181 456 / 696 580 487 — contact@donayemtech.com
 | Emails | Laravel Mail + SMTP/Mailtrap | — |
 | Paiement | CinetPay API | — |
 | Déploiement frontend | Vercel | — |
-| Déploiement backend | Railway / Render | — |
+| Déploiement backend | Hostinger (api.donayemtech.com) | — |
 | Storage | Cloudinary ou S3 | — |
 
 ## Commandes
@@ -50,7 +51,8 @@ npm run start    # sert le build de production
 npm run lint     # ESLint (config eslint-config-next)
 ```
 
-Il n'y a pas de suite de tests côté frontend actuellement.
+Il n'y a pas de suite de tests côté frontend actuellement. Côté backend, `tests/` ne contient que les
+`ExampleTest` du skeleton Laravel.
 
 ### Backend (`/backend`)
 
@@ -73,16 +75,25 @@ Les deux serveurs doivent tourner en parallèle pour développer une fonctionnal
 
 ### Frontend — routing
 
-App Router avec deux groupes de routes distincts sous `app/` :
+App Router avec deux zones distinctes sous `app/` :
 
-- `app/(public)/` — toutes les pages publiques (home, services, portfolio, blog, devis, paiement,
-  contact, à-propos). Le groupe `(public)` a son propre `layout.jsx` (Navbar/Footer/WhatsAppButton).
-- `app/admin/` — panneau d'administration (dashboard, services, portfolio, devis, paiements, blog,
-  messages, settings), avec son propre `layout.jsx` (AdminSidebar/AdminHeader). `app/admin/login` est
+- `app/[locale]/(public)/` — toutes les pages publiques (home, services, portfolio, blog, devis,
+  paiement, contact, à-propos), préfixées par la locale (`/fr/...`, `localePrefix: 'always'`). Le groupe
+  `(public)` a son propre `layout.jsx` (Navbar/Footer/WhatsAppButton).
+- `app/admin/` — panneau d'administration, **hors** `[locale]` (non traduit) : dashboard, services,
+  portfolio, devis, paiements, blog, messages, settings. Avec son propre `layout.jsx` (AdminSidebar/AdminHeader). `app/admin/login` est
   la seule route admin publique.
 
 Pas de Filament ni d'admin Laravel côté serveur : l'admin est une SPA Next.js qui consomme l'API
 Laravel via Sanctum tokens.
+
+### Frontend — i18n
+
+next-intl, locales `fr` (défaut) / `en` / `de` définies dans `i18n/routing.js`. Textes dans
+`messages/{fr,en,de}.json` — toute nouvelle chaîne UI publique doit être ajoutée aux **trois** fichiers.
+Utiliser `Link`/`useRouter`/`usePathname` de `i18n/navigation.js` (pas ceux de `next/link` /
+`next/navigation`) pour conserver le préfixe de locale. Côté backend, `lang/fr` fournit les messages de
+validation en français.
 
 ### Frontend — data & état
 
@@ -94,7 +105,8 @@ Laravel via Sanctum tokens.
   `removeToken` le font déjà) si on touche à l'auth.
 - `contexts/AdminAuthContext.jsx` — fournit `user`, `login`, `logout`, `isAuthenticated` à l'admin ;
   appelle `/auth/me` au montage pour valider le token existant.
-- `middleware.js` — protège `/admin/*` (sauf `/admin/login`) en vérifiant la présence du cookie
+- `middleware.js` — fait d'abord le garde-fou admin, puis délègue tout le reste au middleware next-intl.
+  Protège `/admin/*` (sauf `/admin/login`) en vérifiant la présence du cookie
   `admin_token` ; ne valide pas le token côté edge, seule sa présence (la validation réelle se fait
   via l'appel `/auth/me`).
 - `lib/queries.js` — fonctions de fetch par ressource (services, portfolio, blog, etc.), utilisées par
@@ -158,6 +170,15 @@ Règles critiques :
 - Variables sensibles (`CINETPAY_API_KEY`, `CINETPAY_SITE_ID`) uniquement en `.env`, jamais commit.
   `CINETPAY_NOTIFY_URL`/`RETURN_URL`/`CANCEL_URL` sont dérivées de `APP_URL`/`FRONTEND_URL` dans
   `.env.example` — garder ces deux valeurs cohérentes entre front et back en dev.
+
+## Déploiement
+
+Frontend sur Vercel (`vercel.json` réécrit `/api/*` vers `https://api.donayemtech.com`). Backend sur
+**Hostinger** (hébergement mutualisé) — `README.md` et `CHECKLIST_LANCEMENT.md` mentionnent encore
+Railway/Render, c'est obsolète. `backend/deploy.sh` (migrate, seed `SettingSeeder`, caches config/route/view,
+`storage:link`) et `Procfile` sont des reliquats PaaS. `next.config.js` n'autorise `next/image` que pour
+des hôtes listés (`api.donayemtech.com`, Cloudinary, S3…) : ajouter tout nouvel hôte de médias dans
+`images.remotePatterns`. CORS (`backend/config/cors.php`) dérive les variantes www/non-www de `FRONTEND_URL`.
 
 ## Design system
 

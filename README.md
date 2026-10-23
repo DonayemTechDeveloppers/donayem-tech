@@ -24,7 +24,7 @@ paiements en ligne (Orange Money, MTN MoMo, carte bancaire) via CinetPay.
 | Emails | Laravel Mail + SMTP | — |
 | Paiement | CinetPay API | — |
 | Déploiement frontend | Vercel | — |
-| Déploiement backend | Railway / Render | — |
+| Déploiement backend | Hostinger | — |
 
 ## Architecture des dossiers
 
@@ -162,9 +162,9 @@ aveugle au webhook) → `Order.status = paid` → email de confirmation.
 - **Frontend → Vercel** : `frontend/vercel.json` définit les rewrites `/api/*` et les headers de
   sécurité. Variables d'environnement à configurer dans Vercel (jamais commit un `.env.production`
   réel — voir `frontend/.env.production.example` pour le gabarit).
-- **Backend → Railway/Render** : `backend/Procfile` et `backend/deploy.sh` (migrations, cache config/
-  route/view, `storage:link`). Pour un VPS, voir `backend/.htaccess` (Apache) ou `backend/nginx.conf`
-  (snippet nginx).
+- **Backend → Hostinger** (`api.donayemtech.com`) : `backend/deploy.sh` (migrations, cache config/
+  route/view, `storage:link`) peut être exécuté en SSH. `backend/Procfile` est un reliquat PaaS.
+  Voir aussi `backend/.htaccess` (Apache) ou `backend/nginx.conf` (snippet nginx).
 - **Checklist de lancement** : voir `CHECKLIST_LANCEMENT.md` à la racine — à valider intégralement
   avant mise en production (SSL, credentials CinetPay de prod, tests de paiement réels, SEO, backups,
   etc.).
