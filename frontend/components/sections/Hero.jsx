@@ -45,6 +45,20 @@ export default function Hero() {
     <section className="relative -mt-24 flex min-h-screen items-center overflow-hidden bg-navy-900">
       <div className="absolute inset-0 bg-[length:200%_200%] bg-gradient-to-br from-navy-900 via-navy-800 to-navy-900 animate-gradient-move" />
 
+      {!shouldReduceMotion && (
+        <video
+          className="absolute inset-0 h-full w-full object-cover"
+          src="/videos/hero.mp4"
+          autoPlay
+          muted
+          loop
+          playsInline
+          preload="metadata"
+          aria-hidden="true"
+        />
+      )}
+      <div className="absolute inset-0 bg-navy-900/70" />
+
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {PARTICLES.map((p, i) => (
           <motion.span
