@@ -422,5 +422,17 @@
     "eyebrow": "Akademische Dienstleistungen",
     "heading": "Umfassende Unterstützung für Ihre Dokumente",
     "errorMessage": "Die akademischen Dienstleistungen konnten momentan nicht geladen werden."
+  },
+  "ContactPage": {
+    "metaTitle": "Kontakt — DONAYEM TECH | Digitalagentur in Douala",
+    "metaDescription": "Kontaktieren Sie DONAYEM TECH in Douala: Angebote, Informationen, Schulungen. Telefon, E-Mail und WhatsApp.",
+    "detailsHeading": "Unsere Kontaktdaten",
+    "address": "Ange Raphaël – Hôtel Sélect, Douala, Kamerun",
+    "hours": "Montag – Samstag: 8:00 – 18:00 Uhr",
+    "whatsappCta": "Per WhatsApp chatten",
+    "whatsappMessage": "Guten Tag DONAYEM TECH, ich hätte gerne Informationen.",
+    "facebookAriaLabel": "DONAYEM TECH auf Facebook",
+    "instagramAriaLabel": "DONAYEM TECH auf Instagram",
+    "mapTitle": "Standort DONAYEM TECH — Douala, Ange Raphaël"
   }
 }
